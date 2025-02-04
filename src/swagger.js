@@ -15,8 +15,34 @@ const swaggerOptions = {
         description: 'Development server',
       },
     ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
+    },
+    security: [{
+      bearerAuth: [],
+    }],
+    tags: [
+      {
+        name: 'Auth',
+        description: 'Authentication endpoints'
+      },
+      {
+        name: 'Farmer',
+        description: 'Farmer management endpoints'
+      },
+      {
+        name: 'Farm',
+        description: 'Farm management endpoints'
+      }
+    ]
   },
-  apis: ['./src/routes.js'], // Path to the API routes
+  apis: ['./src/routes.js', './src/routes/*.js'],
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
