@@ -1,4 +1,6 @@
 require('dotenv').config();
+
+const { default: migrate } = require('node-pg-migrate');
 const express = require('express');
 const db = require('./db');
 const routes = require('./routes');
@@ -15,17 +17,58 @@ if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir);
 }
 
-// Middleware
-app.use(express.json());
-app.use('/uploads', express.static(uploadsDir)); // Serve uploaded files
+// Function to construct database URL from environment variables
+const constructDatabaseUrl = () => {
+  const { DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME } = process.env;
+  return `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`;
+};
 
-// Routes
-app.use('/', routes);
+const runMigrations = async () => {
+  try {
+    await migrate({
+      direction: process.env.NODE_MIGRATE_DIRECTION || 'up',
+      databaseUrl: constructDatabaseUrl(),
+      migrationsTable: 'pgmigrations',
+      dir: 'migrations'
+    });
+    console.log('Migrations completed successfully');
+  } catch (error) {
+    console.error('Migration error:', error);
+    throw error;
+  }
+};
 
-// Swagger Documentation
-swaggerSetup(app);
+// Check if running in migration-only mode
+const isMigrateOnly = process.argv.includes('--migrate-only');
 
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+if (isMigrateOnly) {
+  // Run migrations and exit
+  runMigrations()
+    .then(() => process.exit(0))
+    .catch((error) => {
+      console.error('Migration failed:', error);
+      process.exit(1);
+    });
+} else {
+  // Normal server startup
+  // Middleware
+  app.use(express.json());
+  app.use('/uploads', express.static(uploadsDir)); 
+
+  // Routes
+  app.use('/', routes);
+
+  // Swagger Documentation
+  swaggerSetup(app);
+
+  // Start the server
+  app.listen(PORT, async () => {
+    try {
+      await runMigrations();
+      console.log(`Server is running on http://localhost:${PORT}`);
+    } catch (error) {
+      console.error('Server startup failed:', error);
+      process.exit(1);
+    }
+  });
+}
