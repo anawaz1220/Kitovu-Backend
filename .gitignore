@@ -1,6 +1,9 @@
 # Ignore Node.js modules
 node_modules/
 
+#pictures
+uploads/
+
 
 # Ignore logs
 logs/
@@ -27,6 +30,7 @@ coverage/
 # Ignore local database files
 *.sqlite
 *.sqlite3
+.env
 
 # Ignore temporary files
 *.tmp
