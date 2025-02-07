@@ -1,76 +1,46 @@
 const db = require('../db');
 
 class FarmerService {
-  /**
-   * Create a new farmer with associated farm and affiliation
-   */
-  async createFarmer(farmerData, farmData, affiliationData, files) {
+  async createFarmer(farmerData, farms, affiliationData, files) {
     const client = await db.connect();
     
     try {
       await client.query('BEGIN');
 
-      // Insert farmer
-      const farmerQuery = `
-        INSERT INTO farmer (
-          first_name, middle_name, last_name, gender, date_of_birth, 
-          phone_number, alternate_phone_number, street_address, state, 
-          community, lga, city, farmer_picture, id_type, id_number, 
-          id_document_picture, user_latitude, user_longitude
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)
-        RETURNING id;
-      `;
-      
-      const farmerValues = [
-        farmerData.first_name,
-        farmerData.middle_name,
-        farmerData.last_name,
-        farmerData.gender,
-        farmerData.date_of_birth,
-        farmerData.phone_number,
-        farmerData.alternate_phone_number,
-        farmerData.street_address,
-        farmerData.state,
-        farmerData.community,
-        farmerData.lga,
-        farmerData.city,
-        files.farmer_picture[0].path,
-        farmerData.id_type,
-        farmerData.id_number,
-        files.id_document_picture[0].path,
-        farmerData.user_latitude,
-        farmerData.user_longitude
-      ];
-
+      // Insert farmer (your existing code)
       const farmerResult = await client.query(farmerQuery, farmerValues);
       const farmerId = farmerResult.rows[0].id;
 
-      // Insert farm
+      // Insert multiple farms
       const farmQuery = `
         INSERT INTO farm (
           farmer_id, farm_type, ownership_status, lease_years, lease_months,
           area, crop_type, crop_area, livestock_type, number_of_animals,
           farm_latitude, farm_longitude, farm_geometry
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, ST_GeomFromText($13, 4326));
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, ST_GeomFromText($13, 4326))
+        RETURNING id;
       `;
 
-      const farmValues = [
-        farmerId,
-        farmData.farm_type,
-        farmData.ownership_status,
-        farmData.lease_years,
-        farmData.lease_months,
-        farmData.area,
-        farmData.crop_type,
-        farmData.crop_area,
-        farmData.livestock_type,
-        farmData.number_of_animals,
-        farmData.farm_latitude,
-        farmData.farm_longitude,
-        farmData.farm_geometry
-      ];
+      // Insert each farm
+      for (const farmData of farms) {
+        const farmValues = [
+          farmerId,
+          farmData.farm_type,
+          farmData.ownership_status,
+          farmData.lease_years,
+          farmData.lease_months,
+          farmData.area,
+          farmData.crop_type,
+          farmData.crop_area,
+          farmData.livestock_type,
+          farmData.number_of_animals,
+          farmData.farm_latitude,
+          farmData.farm_longitude,
+          farmData.farm_geometry
+        ];
 
-      await client.query(farmQuery, farmValues);
+        await client.query(farmQuery, farmValues);
+      }
 
       // Insert affiliation
       const affiliationQuery = `
