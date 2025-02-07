@@ -67,8 +67,8 @@ router.use('/api/auth', authRoutes);
  *               farm:
  *                 type: string
  *                 description: |
- *                   Farm details in JSON format:
- *                   {
+ *                   Array of farm details in JSON format:
+ *                   [{
  *                     "farm_type": "Mixed", *
  *                     "ownership_status": "Owned", *
  *                     "lease_years": null,
@@ -81,9 +81,9 @@ router.use('/api/auth', authRoutes);
  *                     "farm_latitude": 7.992079, *
  *                     "farm_longitude": 3.565551, *
  *                     "farm_geometry": "MULTIPOLYGON(((7.992079 3.565551, 7.992179 3.565551, 7.992179 3.565651, 7.992079 3.565651, 7.992079 3.565551)), ((7.992279 3.565751, 7.992379 3.565751, 7.992379 3.565851, 7.992279 3.565851, 7.992279 3.565751)))"
- *                   }
+ *                   }]
  *                 example: |
- *                   {
+ *                   [{
  *                     "farm_type": "Mixed",
  *                     "ownership_status": "Owned",
  *                     "lease_years": null,
@@ -96,7 +96,7 @@ router.use('/api/auth', authRoutes);
  *                     "farm_latitude": 7.992079,
  *                     "farm_longitude": 3.565551,
  *                     "farm_geometry": "MULTIPOLYGON(((7.992079 3.565551, 7.992179 3.565551, 7.992179 3.565651, 7.992079 3.565651, 7.992079 3.565551)), ((7.992279 3.565751, 7.992379 3.565751, 7.992379 3.565851, 7.992279 3.565851, 7.992279 3.565751)))"
- *                   }
+ *                   }]
  *               affiliation:
  *                 type: string
  *                 description: |
