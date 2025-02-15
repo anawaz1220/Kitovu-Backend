@@ -43,9 +43,10 @@ router.use('/api/auth', authRoutes);
  *                     "lga": "Ibadan",
  *                     "city": "Ibadan",
  *                     "id_type": "NationalID", *
- *                     "id_number": "12345678901" *
- *                     "user_latitude":6.524379, *
- *                     "user_longitude":3.379206 *
+ *                     "id_number": "12345678901", *
+ *                     "user_latitude": 6.524379, *
+ *                     "user_longitude": 3.379206, *
+ *                     "remarks": "Farmer showed interest in modern farming techniques"
  *                   }
  *                 example: |
  *                   {
@@ -62,7 +63,10 @@ router.use('/api/auth', authRoutes);
  *                     "lga": "Ibadan",
  *                     "city": "Ibadan",
  *                     "id_type": "NationalID",
- *                     "id_number": "12345678901"
+ *                     "id_number": "12345678901",
+ *                     "user_latitude": 6.524379,
+ *                     "user_longitude": 3.379206,
+ *                     "remarks": "Farmer showed interest in modern farming techniques"
  *                   }
  *               farm:
  *                 type: string

@@ -82,7 +82,7 @@ src/
 1. Clone the repository:
    ```bash
    git clone [repository-url]
-   cd farmer-management-api
+   cd trakos-backend
    ```
 
 2. Install dependencies:
@@ -173,35 +173,7 @@ The system uses JWT for authentication. Include the token in requests:
 Authorization: Bearer <your_token>
 ```
 
-Default admin credentials:
+## Default admin credentials:
 - Email: admin@kitovu.com.ng
 - Password: K!tovu@dm!n2024
-
-## Development Guidelines
-
-1. **Code Organization**
-   - Keep files under 125 lines
-   - Split functionality into appropriate services
-   - Use middleware for validation
-
-2. **Error Handling**
-   - Use try-catch blocks
-   - Return consistent error responses
-   - Log errors appropriately
-
-3. **Database**
-   - Use migrations for schema changes
-   - Document complex queries
-   - Use transactions where necessary
-
-4. **API Design**
-   - Follow RESTful principles
-   - Validate inputs
-   - Document with Swagger
-
-5. **Security**
-   - Validate file uploads
-   - Sanitize user inputs
-   - Use proper authentication
-   - Implement rate limiting
 
